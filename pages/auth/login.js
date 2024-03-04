@@ -1,6 +1,31 @@
 import Link from "next/link";
+import { useState } from "react";
 
-export default function Register() {
+export default function Login() {
+
+    const [form, setForm] = useState({
+        email: '',
+        passowrd: ""
+    })
+
+    const handleChange = (e) => {
+        const { name, value } = e?.target
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
+
+    const loginUser = () => {
+        axios.get(`http://localhost:5000/users?email=${email}`)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     return (
         <div class="h-full bg-white">
             <div class="h-full">
@@ -19,7 +44,7 @@ export default function Register() {
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form className="space-y-6" action="#" method="POST">
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="email" onChange={handleChange} value={form?.email} name={email} className="block text-sm font-medium leading-6 text-gray-900">
                                     Email address
                                 </label>
                                 <div className="mt-2">
@@ -48,7 +73,7 @@ export default function Register() {
                                 <div className="mt-2">
                                     <input
                                         id="password"
-                                        name="password"
+                                        onChange={handleChange} value={form?.passowrd} name={passowrd}
                                         type="password"
                                         autoComplete="current-password"
                                         required

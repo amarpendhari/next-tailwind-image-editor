@@ -1,6 +1,34 @@
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Register() {
+
+    const registerUser = (user) => {
+        axios.post("http://localhost:5000/users", user)
+            .then(res => {
+                localStorage.setItem("email", response.data.email);
+                localStorage.setItem("name", response.data.name);
+            })
+            .catch(err => {
+                console.error(err.response);
+            })
+    }
+
+    const getUsers = () => {
+        axios.get("http://localhost:5000/users")
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(res)
+            })
+    }
+
+    useEffect(() => {
+        getUsers()
+    },[])
+
+
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
