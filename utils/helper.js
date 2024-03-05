@@ -53,7 +53,7 @@ export const validateForm = async (obj, objValidation, notRequired) => {
 
 // extra validation
 const customValidate = async (key, keyValidation, value) => {
-    // console.log('customValidate', key, keyValidation, value)
+    console.log('customValidate', key, keyValidation, value)
     if (keyValidation === 'email') {
         let res = await ValidateEmail(value)
         if (res) return true
@@ -61,6 +61,7 @@ const customValidate = async (key, keyValidation, value) => {
         // console.log('customValidate res', res)
     } else if (keyValidation === 'password') {
         let res = await checkPassword(value)
+        // console.log('customValidate res', res)
         if (res) return true
         if (!res) return 'Password length must be atleast 8 characters with uppercase, lowercase, number and special characters'
     } if (keyValidation?.toString()?.includes('min') && !keyValidation?.toString()?.includes('max') && acceptOnlyNumbers(keyValidation) && key !== 'rsvpUrl') {

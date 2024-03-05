@@ -1,13 +1,24 @@
 import Link from "next/link";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { validateForm } from "@/utils/helper";
+import { useRouter } from "next/router";
 
 export default function Login() {
 
-    const [form, setForm] = useState({
+    const router = useRouter()
+    const formOG = {
         email: '',
-        passowrd: ''
-    })
+        password: ''
+    }
+    const formValidation = {
+        email: 'email',
+        password: 'password'
+    }
+    const [form, setForm] = useState(formOG)
+    const [error, setError] = useState({ formOG })
+    const [showError, setShowError] = useState(false)
+    const [users, setUsers] = useState([])
 
     const handleChange = (e) => {
         const { name, value } = e?.target
@@ -17,18 +28,59 @@ export default function Login() {
         })
     }
 
-    const loginUser = () => {
-        axios.get(`http://localhost:5000/users?email=${email}`)
-        .then(res => {
-            console.log(res)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setShowError(true)
+        pageFormValidation(true)
     }
 
+    const pageFormValidation = async (call = false) => {
+        const result = await validateForm(form, formValidation, [])
+        console.log('result', result)
+        if (result === true && call) {
+            setError({})
+            let newUser = users.findIndex(el => el?.email === form?.email)
+            console.log('newasdasd', newUser)
+            if (newUser !== -1) {
+                loginUser(form?.email)
+            } else {
+                alert('User Not Found !!!')
+            }
+        } else {
+            setError(result)
+        }
+    }
+
+    const loginUser = (email) => {
+        let user = users.find(el => el?.email === form?.email)
+        localStorage.setItem("user", JSON.stringify(user));
+        router.push('/dashboard')
+    }
+
+
+    const getUsers = () => {
+        axios.get("http://localhost:5000/users")
+            .then(res => {
+                console.log(res)
+                if (res?.data) {
+                    setUsers(res?.data)
+                }
+            })
+            .catch(err => {
+                console.log(res)
+            })
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+
+    useEffect(() => {
+        if (showError) pageFormValidation(false)
+    }, [form])
+
     return (
-        <div className="h-full bg-white">
+        <div className="h-full h-lvh bg-white">
             <div className="h-full">
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -45,7 +97,7 @@ export default function Login() {
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form className="space-y-6" action="#" method="POST">
                             <div>
-                                <label htmlFor="email" onChange={handleChange} value={form?.email} name={`email`} className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                     Email address
                                 </label>
                                 <div className="mt-2">
@@ -60,6 +112,7 @@ export default function Login() {
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
+                                <p className="text-red-600 text-sm">{error?.email}</p>
                             </div>
 
                             <div>
@@ -74,19 +127,26 @@ export default function Login() {
                                 </div>
                             </div> */}
                                 <div className="mt-2">
+                                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                                        Password
+                                    </label>
                                     <input
                                         id="password"
-                                        onChange={handleChange} value={form?.passowrd} name={`passowrd`}
+                                        name="password"
                                         type="password"
                                         autoComplete="current-password"
                                         required
+                                        value={form?.password}
+                                        onChange={handleChange}
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
+                                <p className="text-red-600 text-sm">{error?.password}</p>
                             </div>
 
                             <div>
                                 <button
+                                    onClick={handleSubmit}
                                     type="submit"
                                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >
