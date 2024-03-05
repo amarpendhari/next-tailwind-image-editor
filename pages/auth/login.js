@@ -1,11 +1,12 @@
 import Link from "next/link";
+import axios from "axios";
 import { useState } from "react";
 
 export default function Login() {
 
     const [form, setForm] = useState({
         email: '',
-        passowrd: ""
+        passowrd: ''
     })
 
     const handleChange = (e) => {
@@ -27,8 +28,8 @@ export default function Login() {
     }
 
     return (
-        <div class="h-full bg-white">
-            <div class="h-full">
+        <div className="h-full bg-white">
+            <div className="h-full">
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                         <img
@@ -44,7 +45,7 @@ export default function Login() {
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form className="space-y-6" action="#" method="POST">
                             <div>
-                                <label htmlFor="email" onChange={handleChange} value={form?.email} name={email} className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="email" onChange={handleChange} value={form?.email} name={`email`} className="block text-sm font-medium leading-6 text-gray-900">
                                     Email address
                                 </label>
                                 <div className="mt-2">
@@ -54,6 +55,8 @@ export default function Login() {
                                         type="email"
                                         autoComplete="email"
                                         required
+                                        value={form?.email}
+                                        onChange={handleChange}
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                 </div>
@@ -73,7 +76,7 @@ export default function Login() {
                                 <div className="mt-2">
                                     <input
                                         id="password"
-                                        onChange={handleChange} value={form?.passowrd} name={passowrd}
+                                        onChange={handleChange} value={form?.passowrd} name={`passowrd`}
                                         type="password"
                                         autoComplete="current-password"
                                         required

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@syncfusion/ej2-react-image-editor": "^24.2.8",
+    "axios": "^1.6.7",
     "concurrently": "^8.2.2",
     "json-server": "^1.0.0-alpha.23",
     "next": "14.1.1",
