@@ -1,3 +1,49 @@
+# Next Tailwind Image Editor
+
+## Project setup
+
+```
+npm install
+```
+## Run App(Scripts added for npm run dev)
+
+```
+npm run dev
+```
+
+## Image Editor
+
+- Image Editor using Next, Tailwind, JSON Server & Syncfusion
+
+## Project Specifications
+
+- A Simple Next Image Editor using Syncfusion
+- JSON Server is a Node Module that you can use to create demo rest json webservice(i.e full fake REST API )
+- Auth Implemented
+- User can Register and Login
+- Email ID connot be used Twice
+- User can Edit & Download Edited Image
+
+* Registration
+
+  - All Feilds are Required
+  - Used Email Id cannot be used again
+  - Errors/Alerts if any Feild left missing or for Invalid Data
+  - Submit Registration Form and Log In User
+
+* Login
+
+  - Only Log In for Users who have Registered
+  - Fake account cannot Log IN
+  - Enter Valid Email Id & Password
+
+* Image Editor
+
+  - Basic dashbaord with interface
+  - Syncfusion used for Image Editor
+  - Edit Image - add text(change color, font size, bold, underline), filter(change different overlays), crop(crop in multiple dimensions)
+  - Download/Save Image - Edited Image can be downloaded and saved I
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
