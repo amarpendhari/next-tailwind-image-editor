@@ -54,7 +54,7 @@ export default function Register() {
     }
 
     const registerUser = (user) => {
-        axios.post("http://localhost:5000/users", user)
+        axios.post(process.env.NEXT_API_URL, user)
             .then(res => {
                 localStorage.setItem("user", JSON.stringify(response.data));
                 router.push('/dashboard')
@@ -65,7 +65,7 @@ export default function Register() {
     }
 
     const getUsers = () => {
-        axios.get("http://localhost:5000/users")
+        axios.get(process.env.NEXT_API_URL)
             .then(res => {
                 console.log(res)
                 if(res?.data) {

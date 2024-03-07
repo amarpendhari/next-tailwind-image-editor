@@ -59,7 +59,7 @@ export default function Login() {
 
 
     const getUsers = () => {
-        axios.get("http://localhost:5000/users")
+        axios.get(process.env.NEXT_API_URL)
             .then(res => {
                 console.log(res)
                 if (res?.data) {
