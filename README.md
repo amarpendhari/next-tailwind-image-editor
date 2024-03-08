@@ -10,8 +10,9 @@ npm install
 ```
 npm run dev
 ```
+[A demo is worth a thousand words](https://master--next-tailwind-image-editor.netlify.app/auth/login)
 
-## Image Editor
+## Image Editor 
 
 - Image Editor using Next, Tailwind, JSON Server & Syncfusion
 
