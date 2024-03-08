@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { validateForm } from "@/utils/helper";
 import { useRouter } from "next/router";
-import { toast } from 'react-toastify';
 
 export default function Login() {
 
@@ -38,14 +37,14 @@ export default function Login() {
     const pageFormValidation = async (call = false) => {
         const result = await validateForm(form, formValidation, [])
         console.log('result', result)
-        if (users?.length === 0) toast.error('No User Found !!!')
-        if (result === true && call && users?.length) {
+        if (result === true && call) {
             setError({})
             let newUser = users.findIndex(el => el?.email === form?.email)
+            console.log('newasdasd', newUser)
             if (newUser !== -1) {
                 loginUser(form?.email)
             } else {
-                toast.error('No User Found !!!')
+                alert('User Not Found !!!')
             }
         } else {
             setError(result)
@@ -54,16 +53,22 @@ export default function Login() {
 
     const loginUser = (email) => {
         let user = users.find(el => el?.email === form?.email)
-        if(user) {
-            toast.success('Logged In Successfully')
-            localStorage.setItem("currentUser", JSON.stringify(user));
-            router.push('/dashboard')
-        }
+        localStorage.setItem("user", JSON.stringify(user));
+        router.push('/dashboard')
     }
 
+
     const getUsers = () => {
-        let userArr = JSON.parse(localStorage.getItem('users'))
-        setUsers(userArr || [])
+        axios.get(process.env.NEXT_API_URL)
+            .then(res => {
+                console.log(res)
+                if (res?.data) {
+                    setUsers(res?.data)
+                }
+            })
+            .catch(err => {
+                console.log(res)
+            })
     }
 
     useEffect(() => {

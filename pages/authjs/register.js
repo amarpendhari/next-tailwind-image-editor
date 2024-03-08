@@ -2,22 +2,23 @@ import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { validateForm } from "@/utils/helper";
-import { useRouter } from "next/router";
-import { toast } from 'react-toastify';
+import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function Register() {
 
     const router = useRouter()
     const formOG = {
+        name: '',
         email: '',
         password: ''
     }
     const formValidation = {
+        name: '',
         email: 'email',
         password: 'password'
     }
     const [form, setForm] = useState(formOG)
-    const [error, setError] = useState({ formOG })
+    const [error, setError] = useState({formOG})
     const [showError, setShowError] = useState(false)
     const [users, setUsers] = useState([])
 
@@ -38,41 +39,51 @@ export default function Login() {
     const pageFormValidation = async (call = false) => {
         const result = await validateForm(form, formValidation, [])
         console.log('result', result)
-        if (users?.length === 0) toast.error('No User Found !!!')
-        if (result === true && call && users?.length) {
+        if (result === true && call) {
             setError({})
-            let newUser = users.findIndex(el => el?.email === form?.email)
-            if (newUser !== -1) {
-                loginUser(form?.email)
+            let newUser = users.findIndex(el => el?.email == form?.email)
+            console.log('newasdasd', newUser)
+            if(newUser === -1) {
+                registerUser(form)
             } else {
-                toast.error('No User Found !!!')
+                alert('User Already Registered !!!')
             }
         } else {
             setError(result)
         }
     }
 
-    const loginUser = (email) => {
-        let user = users.find(el => el?.email === form?.email)
-        if(user) {
-            toast.success('Logged In Successfully')
-            localStorage.setItem("currentUser", JSON.stringify(user));
-            router.push('/dashboard')
-        }
+    const registerUser = (user) => {
+        axios.post(process.env.NEXT_API_URL, user)
+            .then(res => {
+                localStorage.setItem("user", JSON.stringify(response.data));
+                router.push('/dashboard')
+            })
+            .catch(err => {
+                console.error(err.response);
+            })
     }
 
     const getUsers = () => {
-        let userArr = JSON.parse(localStorage.getItem('users'))
-        setUsers(userArr || [])
+        axios.get(process.env.NEXT_API_URL)
+            .then(res => {
+                console.log(res)
+                if(res?.data) {
+                    setUsers(res?.data)
+                }
+            })
+            .catch(err => {
+                console.log(res)
+            })
     }
 
     useEffect(() => {
         getUsers()
-    }, [])
+    },[])
 
     useEffect(() => {
-        if (showError) pageFormValidation(false)
-    }, [form])
+        if(showError) pageFormValidation(false)
+    },[form])
 
     return (
         <div className="h-full h-lvh bg-white">
@@ -88,9 +99,26 @@ export default function Login() {
                             Sign in to your account
                         </h2>
                     </div>
-
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                         <form className="space-y-6" action="#" method="POST">
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Full Name
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        required
+                                        value={form?.name}
+                                        onChange={handleChange}
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                                <p className="text-red-600 text-sm">{error?.name}</p>
+                            </div>
+
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                     Email address
@@ -150,9 +178,8 @@ export default function Login() {
                             </div>
                         </form>
                         <p className="mt-10 text-center text-sm text-gray-500">
-                            New here?
-                            <Link href={'/auth/register'} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                                &nbsp;Register Now
+                            <Link href={'/auth/login'} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                Back to Login
                             </Link>
                         </p>
                     </div>

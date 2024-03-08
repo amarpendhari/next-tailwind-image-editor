@@ -1,7 +1,8 @@
 import '@/styles/globals.css'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App({ Component, pageProps }) {
 
@@ -9,13 +10,15 @@ export default function App({ Component, pageProps }) {
   const unAuthRoutes = ['/auth/login', '/auth/register']
   
   useEffect(() => {
-    if (localStorage?.getItem('user')) {
+    if (localStorage?.getItem('currentUser')) {
       router.push('/dashboard')
-    } else if (!unAuthRoutes.includes(router)) {
+    } else if (!unAuthRoutes.includes(router?.pathname)) {
       router.push('/auth/login')
     }
-    console.log('localStorage?.getItem(user)', localStorage?.getItem('user'), router?.pathname, localStorage?.getItem('user') && unAuthRoutes.includes(router))
   }, [])
 
-  return <Component {...pageProps} />
+  return <>
+    <Component {...pageProps} />
+    <ToastContainer autoClose={3000} />
+  </>
 }

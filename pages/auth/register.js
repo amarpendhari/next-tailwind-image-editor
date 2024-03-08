@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { validateForm } from "@/utils/helper";
 import { useRouter } from "next/navigation";
+import { toast } from 'react-toastify';
 
 export default function Register() {
 
@@ -18,7 +19,7 @@ export default function Register() {
         password: 'password'
     }
     const [form, setForm] = useState(formOG)
-    const [error, setError] = useState({formOG})
+    const [error, setError] = useState({ formOG })
     const [showError, setShowError] = useState(false)
     const [users, setUsers] = useState([])
 
@@ -42,11 +43,10 @@ export default function Register() {
         if (result === true && call) {
             setError({})
             let newUser = users.findIndex(el => el?.email == form?.email)
-            console.log('newasdasd', newUser)
-            if(newUser === -1) {
+            if (newUser === -1) {
                 registerUser(form)
             } else {
-                alert('User Already Registered !!!')
+                toast.error('User Already Registered !!!')
             }
         } else {
             setError(result)
@@ -54,36 +54,25 @@ export default function Register() {
     }
 
     const registerUser = (user) => {
-        axios.post(process.env.NEXT_API_URL, user)
-            .then(res => {
-                localStorage.setItem("user", JSON.stringify(response.data));
-                router.push('/dashboard')
-            })
-            .catch(err => {
-                console.error(err.response);
-            })
+        let userArr = [...users, user]
+        toast.success('Registered & Logged in Successfully')
+        localStorage.setItem("users", JSON.stringify(userArr));
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        router.push('/dashboard')
     }
 
     const getUsers = () => {
-        axios.get(process.env.NEXT_API_URL)
-            .then(res => {
-                console.log(res)
-                if(res?.data) {
-                    setUsers(res?.data)
-                }
-            })
-            .catch(err => {
-                console.log(res)
-            })
+        let userArr = JSON.parse(localStorage.getItem('users'))
+        setUsers(userArr || [])
     }
 
     useEffect(() => {
         getUsers()
-    },[])
+    }, [])
 
     useEffect(() => {
-        if(showError) pageFormValidation(false)
-    },[form])
+        if (showError) pageFormValidation(false)
+    }, [form])
 
     return (
         <div className="h-full h-lvh bg-white">
@@ -96,7 +85,7 @@ export default function Register() {
                             alt="Your Company"
                         />
                         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                            Sign in to your account
+                            Register Now
                         </h2>
                     </div>
                     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

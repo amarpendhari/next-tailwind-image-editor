@@ -42,8 +42,24 @@ body {
 }
 
 .e-canvas-wrapper {
+  background: #E5E4E2;
+}
+/* .e-image-editor .e-ie-drop-area {
+  background: rgb(254, 88, 41);
+}  */
+
+span {
+  color: rgb(34, 34, 34)
+}
+.e-canvas-wrapper {
   min-height: 800px;
 }
 .e-toolbar .e-toolbar-items.e-tbar-pos {
-      background: #e1e1e1;
+  background: #E5E4E2;
 }
+button.speedy {
+  background: rgb(254, 88, 41);
+}
+/* .e-btn-icon {
+  border: 1px solid red;
+} */
