@@ -37,9 +37,9 @@ export default function Login() {
 
     const pageFormValidation = async (call = false) => {
         const result = await validateForm(form, formValidation, [])
-        console.log('result', result)
-        if (users?.length === 0) toast.error('No User Found !!!')
-        if (result === true && call && users?.length) {
+        if (result === true && call && !users?.length) {
+            toast.error('No User Found !!!')
+        } else if (result === true && call && users?.length) {
             setError({})
             let newUser = users.findIndex(el => el?.email === form?.email)
             if (newUser !== -1) {
