@@ -53,7 +53,7 @@ export const validateForm = async (obj, objValidation, notRequired) => {
 
 // extra validation
 const customValidate = async (key, keyValidation, value) => {
-    console.log('customValidate', key, keyValidation, value)
+    // console.log('customValidate', key, keyValidation, value)
     if (keyValidation === 'email') {
         let res = await ValidateEmail(value)
         if (res) return true
